@@ -1,0 +1,167 @@
+---
+title: "Entity-Relationship Diagrams"
+author: 
+  - Varun Boda
+  - Abhishek Gupta Mashetti
+  - Samitha Gade
+  - Shreya Reddy Dubbaka
+
+format: html
+---
+
+# Entity-Relationship Diagrams
+
+## 1.Library Management System
+
+### Chen Notation (Graphviz)
+This diagram represents the relationships in a library system, where members borrow books. Each loan records the details of a transaction, including the borrowing and return dates.
+
+```{dot}
+graph Library {
+    node [shape=ellipse, style=filled, fillcolor=yellow];
+    Book [label="Book (BookID, Title, Author)"];
+    Member [label="Member (MemberID, Name, MembershipDate)"];
+    Loan [label="Loan (LoanID, LoanDate, ReturnDate)"];
+    
+    node [shape=diamond, style=filled, fillcolor=white];
+    Borrows [label="Borrows"];
+    
+    Book -- Borrows;
+    Member -- Borrows;
+    Borrows -- Loan;
+}
+```
+
+### Crow's Foot Notation (Mermaid)
+Below is a Crow’s Foot diagram that illustrates how books and members interact through the loan process. A single book can be loaned multiple times, and members can borrow multiple books.
+
+```{mermaid}
+erDiagram
+    BOOK ||--o{ LOAN : "can be borrowed in"
+    MEMBER ||--o{ LOAN : "makes"
+    BOOK {
+        int BookID
+        string Title
+        string Author
+    }
+    MEMBER {
+        int MemberID
+        string Name
+        date MembershipDate
+    }
+    LOAN {
+        int LoanID
+        date LoanDate
+        date ReturnDate
+    }
+```
+
+#### Relation Set Schema
+- **Book** (BookID, Title, Author)
+- **Member** (MemberID, Name, MembershipDate)
+- **Loan** (LoanID, LoanDate, ReturnDate, BookID, MemberID)
+
+## 2.Sports Tournament Management System
+
+### Chen Notation (Graphviz)
+This ER diagram models the structure of a sports tournament. Teams participate in matches, and referees officiate these matches. Each match involves two teams.
+
+```{dot}
+graph Tournament {
+    node [shape=ellipse, style=filled, fillcolor=yellow];
+    Team [label="Team (TeamID, Name, Coach)"];
+    Match [label="Match (MatchID, Date, Location)"];
+    Referee [label="Referee (RefereeID, Name, CertificationLevel)"];
+    
+    node [shape=diamond, style=filled, fillcolor=white];
+    Plays [label="Plays"];
+    Officiates [label="Officiates"];
+    
+    Team -- Plays;
+    Match -- Plays;
+    Match -- Officiates;
+    Referee -- Officiates;
+}
+```
+
+### Crow's Foot Notation (Mermaid)
+Here’s a visual representation of how teams, matches, and referees are connected in the tournament. Matches consist of two competing teams and are officiated by a referee.
+
+```{mermaid}
+erDiagram
+    TEAM ||--o{ MATCH : "participates in"
+    MATCH ||--|{ TEAM : "involves"
+    MATCH ||--o{ REFEREE : "is officiated by"
+    REFEREE {
+        int RefereeID
+        string Name
+        string CertificationLevel
+    }
+    TEAM {
+        int TeamID
+        string Name
+        string Coach
+    }
+    MATCH {
+        int MatchID
+        date Date
+        string Location
+    }
+```
+
+#### Relation Set Schema
+- **Team** (TeamID, Name, Coach)
+- **Match** (MatchID, Date, Location)
+- **Referee** (RefereeID, Name, CertificationLevel)
+- **Plays** (MatchID, TeamID)
+- **Officiates** (MatchID, RefereeID)
+
+## 3.Hotel Booking System
+
+### Chen Notation (Graphviz)
+This ER model outlines the hotel booking system, where guests reserve rooms. Each booking logs details such as check-in and check-out dates.
+
+```{dot}
+graph Hotel {
+    node [shape=ellipse, style=filled, fillcolor=yellow];
+    Room [label="Room (RoomNumber, Type, Rate)"];
+    Guest [label="Guest (GuestID, Name, ContactInfo)"];
+    Booking [label="Booking (BookingID, CheckInDate, CheckOutDate)"];
+    
+    node [shape=diamond, style=filled, fillcolor=white];
+    Reserves [label="Reserves"];
+    
+    Guest -- Reserves;
+    Room -- Reserves;
+    Reserves -- Booking;
+}
+```
+
+### Crow's Foot Notation (Mermaid)
+The Crow’s Foot diagram below depicts how guests make bookings for rooms, with each room being reserved over various dates.
+
+```{mermaid}
+erDiagram
+    ROOM ||--o{ BOOKING : "can be booked in"
+    GUEST ||--o{ BOOKING : "makes"
+    ROOM {
+        int RoomNumber
+        string Type
+        float Rate
+    }
+    GUEST {
+        int GuestID
+        string Name
+        string ContactInfo
+    }
+    BOOKING {
+        int BookingID
+        date CheckInDate
+        date CheckOutDate
+    }
+```
+
+#### Relation Set Schema
+- **Room** (RoomNumber, Type, Rate)
+- **Guest** (GuestID, Name, ContactInfo)
+- **Booking** (BookingID, CheckInDate, CheckOutDate, RoomNumber, GuestID)
